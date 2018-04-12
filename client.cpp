@@ -1,4 +1,4 @@
 //client file for CS4390
-//testing branch stuff
+//Authors: Ian Llewellyn, Alex Palm
 //
 //

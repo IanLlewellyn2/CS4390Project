@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
           error("ERROR on accept");
 		}
 		
-		bzero(buffer,256);
+/*		bzero(buffer,256);
 		n = read(newsockfd,buffer,255);
 		if (n < 0)
 		{
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 		{			
 			error("ERROR writing to socket");
 		}
-
+*/
 		checkAndSendFile(newsockfd);
 		
 		close(newsockfd);

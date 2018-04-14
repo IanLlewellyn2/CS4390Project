@@ -14,7 +14,7 @@ void error(const char *msg)
     exit(0);
 }
 
-void askForFile(int newsockfd)
+void askForFile(int sockfd)
 {
 	char buffer[20];
 	char file[100000000];
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 			error("ERROR reading from socket");
 		}
 */
-		askForFile(newsockfd);
+		askForFile(sockfd);
 		printf("%s\n",buffer);
 		close(sockfd);
 	} 

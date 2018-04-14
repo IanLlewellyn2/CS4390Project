@@ -76,6 +76,7 @@ int main(int argc, char *argv[])
 	//----------------------------------start TCP------------------------//
 	if (strcmp(argv[2], tcp1) == 0) //checks to see if tcp was in commandline 
 	{ 
+		printf("tcp btw");
 		int sockfd, newsockfd, portno;
 		socklen_t clilen;
 		char buffer[256];
@@ -110,7 +111,7 @@ int main(int argc, char *argv[])
 		clilen = sizeof(cli_addr);
 		newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
 		
-/*		if (newsockfd < 0) 
+		if (newsockfd < 0) 
 		{
           error("ERROR on accept");
 		}
@@ -129,7 +130,7 @@ int main(int argc, char *argv[])
 		{			
 			error("ERROR writing to socket");
 		}
-*/
+
 		checkAndSendFile(newsockfd);
 		
 		close(newsockfd);

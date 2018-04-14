@@ -19,7 +19,7 @@ void askForFile(int sockfd)
 	printf("testing");
 	char buffer[20];
 	printf("testing");
-	char file[100000000];
+	char file[100000];
 	printf("testing");
 	printf("What file do you want from the server?");
 	printf("testing");
@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
 	//----------------------------------start TCP------------------------//
 	if (strcmp(argv[3], tcp1) == 0) //checks to see if tcp was in commandline 
 	{ 
+		printf("tcp btw");
 		int sockfd, portno, n;
 		struct sockaddr_in serv_addr;
 		struct hostent *server;

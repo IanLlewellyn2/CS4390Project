@@ -20,11 +20,11 @@ void askForFile(int sockfd)
 	char file[100000000];
 	printf("What file do you want from the server?");
 	read(0, buffer, 20); //read from user
-	write(newsockfd, buffer, 20); //send user input to server
+	write(sockfd, buffer, 20); //send user input to server
 	
-	read(newsockfd, buffer, 20); //read in whether the file exists or not
+	read(sockfd, buffer, 20); //read in whether the file exists or not
 	write(1, buffer, 20); //write out server response to stdout
-	read(newsockfd, buffer, 6); //read in the checksum
+	read(sockfd, buffer, 6); //read in the checksum
 	write(1, buffer, 6);
 	
 }

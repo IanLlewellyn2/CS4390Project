@@ -25,9 +25,27 @@ int main(int argc, char *argv[])
          fprintf(stderr,"ERROR, no port provided\n");
          exit(1);
      }
-     sockfd = socket(AF_INET, SOCK_STREAM, 0);
-     if (sockfd < 0) 
+     //checking if udp or tcp using strcmp
+	char udp1[3] = "udp";
+	char tcp1[3] = "tcp";
+	
+	//start tcp//
+	if (strcmp(argv[2], tcp1) == 0)
+	{ 
+    portno = atoi(argv[2]);	
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0) 
         error("ERROR opening socket");
+	} //end tcp//
+	//start udp//
+	else if (strcmp(argv[2], udp1) == 0)
+	{ 
+    portno = atoi(argv[2]);	
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sockfd < 0) 
+        error("ERROR opening socket");
+	} //end udp//
+	
      bzero((char *) &serv_addr, sizeof(serv_addr));
      portno = atoi(argv[1]);
      serv_addr.sin_family = AF_INET;

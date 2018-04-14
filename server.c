@@ -77,7 +77,6 @@ int main(int argc, char *argv[])
 	//----------------------------------start TCP------------------------//
 	if (strcmp(argv[2], tcp1) == 0) //checks to see if tcp was in commandline 
 	{ 
-		printf("tcp btw");
 		int sockfd, newsockfd, portno;
 		socklen_t clilen;
 		char buffer[256];

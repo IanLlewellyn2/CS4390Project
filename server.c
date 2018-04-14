@@ -14,6 +14,24 @@ void error(const char *msg)
     exit(1);
 }
 
+void createChecksum(FILE* file, int size, int socket)
+{
+	char * checksum;
+	int i, j;
+	fseek(file, 0, SEEK_SET); // set fd to start of file
+	for(i = 0; i < 5; i++)
+	{
+		fread(checksum, 1, 1, file);
+		j = (i+1) * (size/5);
+		fseek(file, j, SEEK_SET); //set the next read point for the next iteration of the loop
+	}	
+	fseek(file, size-1, SEEK_SET); //set to end of file
+	fread(checksum, 1, 1, file); //get last char as part of the checksum
+	write(socket, checksum, 6);
+	
+}
+
+
 void checkAndSendFile(char fileName[], int lengthOfName, int newsockfd)
 {
 	int i, n;
@@ -39,7 +57,11 @@ void checkAndSendFile(char fileName[], int lengthOfName, int newsockfd)
 	fseek(data, 0, SEEK_END);
 	int sizeOfFile = ftell(data); //get the length of the file
 	char buffer[sizeOfFile];
-	fseek(data, 0, SEEK_SET); //go back to the 
+	fseek(data, 0, SEEK_SET); //go back to the start of the file
+	
+	//generate a checksum - we want to get 6 chars from the file
+	//first char, then 1/5, 2,5, 3/5, 4/5, last
+	createChecksum(data, sizeOfFile, newsockfd);
 	
 }
 

@@ -21,7 +21,7 @@ void askForFile(int sockfd)
 	char file[100000];
 	bzero(file, 100000);
 //	printf("What file do you want from the server?\n");
-	write(1, "What file you want?", 18);
+	write(1, "What file you want? ", 20);
 	read(0, buffer, 20); //read from user
 	write(sockfd, buffer, 20); //send user input to server
 	bzero(buffer, 20);
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 			error("ERROR connecting");
 		}
 		
-		printf("Please enter the message: ");
+/*		printf("Please enter the message: ");
 		bzero(buffer,256);
 		fgets(buffer,255,stdin);
 		n = write(sockfd,buffer,strlen(buffer));
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 		if (n < 0) 
 		{
 			error("ERROR reading from socket");
-		}
+		}'*/
 
 		askForFile(sockfd);
 		printf("%s\n",buffer);

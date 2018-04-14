@@ -17,6 +17,7 @@ void error(const char *msg)
 void createChecksum(FILE* file, int size, int socket)
 {
 	char * checksum;
+	bzero(checksum, 6);
 	int i, j;
 	fseek(file, 0, SEEK_SET); // set fd to start of file
 	for(i = 0; i < 5; i++)
@@ -44,12 +45,12 @@ void checkAndSendFile(int newsockfd)
 	if( access( fileName, F_OK ) != -1 ) 
 	{
 		//file exists
-		n = write(newsockfd, "File exists", 11);
+		n = write(newsockfd, "File exists\n", 11);
 	} 
 	else 
 	{
 		//file does not exist
-		n = write(newsockfd, "File does not exist", 19); 
+		n = write(newsockfd, "File does not exist\n", 19); 
 		exit(0);
 	}
 	

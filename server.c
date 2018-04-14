@@ -22,7 +22,6 @@ void checkAndSendFile(char fileName[], int lengthOfName, int newsockfd)
 	FILE* data;	
 		
 	fileName[lengthOfName] = '\0'; //convert to a string by adding a null terminator
-	data = fopen(fileName, "r");
 	
 	if( access( fileName, F_OK ) != -1 ) 
 	{
@@ -35,6 +34,8 @@ void checkAndSendFile(char fileName[], int lengthOfName, int newsockfd)
 		n = write(newsockfd, "File does not exist", 19); 
 		exit(0);
 	}
+	
+	data = fopen(fileName, "r");
 		
 	
 	fseek(data, 0, SEEK_END);
@@ -42,18 +43,6 @@ void checkAndSendFile(char fileName[], int lengthOfName, int newsockfd)
 	char buffer[sizeOfFile];
 	fseek(data, 0, SEEK_SET); //go back to the 
 	
-	
-	
-/*	for(i = 0; i < sizeOfFile/2048; i++)
-	{
-		fread(buffer, 2048, 1, data);
-		fseek(data, (i+1) * 2048, SEEK_SET);
-		n = write(newsockfd, buffer, 2048); //send packet to client
-	}
-	
-	int remainingData = sizeOfFile % 2048;
-	fread(buffer, remainingData, 1, data);
-*/
 }
 
 int main(int argc, char *argv[])

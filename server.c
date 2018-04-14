@@ -51,7 +51,10 @@ void checkAndSendFile(int newsockfd)
 	{
 		//file does not exist
 		n = write(newsockfd, "File does not exist\n", 19); 
-		printf("%s is the string you are looking for", fileName);
+		printf("%s is the string you are looking for\n", fileName);
+		//this probably needs a pointer or something
+		//good luck future ian
+		//fileName is blank in the printf
 		exit(0);
 	}
 	

@@ -14,6 +14,20 @@ void error(const char *msg)
     exit(0);
 }
 
+void askForFile(int newsockfd)
+{
+	char buffer[20];
+	char file[100000000];
+	printf("What file do you want from the server?");
+	read(0, buffer, 20); //read from user
+	write(newsockfd, buffer, 20); //send user input to server
+	
+	read(newsockfd, buffer, 20); //read in whether the file exists or not
+	write(1, buffer, 20); //write out server response to stdout
+	read(newsockfd, buffer, 6); //read in the checksum
+	
+}
+
 int main(int argc, char *argv[])
 {
 	//checking if udp or tcp using strcmp

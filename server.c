@@ -14,6 +14,35 @@ void error(const char *msg)
     exit(1);
 }
 
+void checkAndSendFile(char fileName[], int lengthOfName, int newsockfd)
+{
+	int i, n;
+	FILE* data;	
+		
+	fileName[lengthOfName] = '\0'; //convert to a string by adding a null terminator
+	
+	if( access( fileName, F_OK ) != -1 ) 
+	{
+		//file exists
+		n = write(newsockfd, "File exists", 11);
+	} 
+	else 
+	{
+		//file does not exist
+		n = write(newsockfd, "File does not exist", 19); 
+		exit(0);
+	}
+	
+	data = fopen(fileName, "r");
+		
+	
+	fseek(data, 0, SEEK_END);
+	int sizeOfFile = ftell(data); //get the length of the file
+	char buffer[sizeOfFile];
+	fseek(data, 0, SEEK_SET); //go back to the 
+	
+}
+
 int main(int argc, char *argv[])
 {
 	//checking if udp or tcp using strcmp

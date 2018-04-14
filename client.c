@@ -25,26 +25,16 @@ int main(int argc, char *argv[])
        exit(0);
     }
 	//checking if udp or tcp using strcmp
-	char udp1[3] = "udp";
 	char tcp1[3] = "tcp";
+	char udp1[3] = "udp";
 	
-	//start tcp//
-	if (strcmp(argv[3], tcp1) == 0)
+	//----------------------------------start TCP------------------------//
+	if (strcmp(argv[3], tcp1) == 0) //checks to see if tcp was in commandline 
 	{ 
     portno = atoi(argv[2]);	
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) 
         error("ERROR opening socket");
-	} //end tcp//
-	//start udp//
-	else if (strcmp(argv[3], udp1) == 0)
-	{ 
-    portno = atoi(argv[2]);	
-    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sockfd < 0) 
-        error("ERROR opening socket");
-	} //end udp//
-	
     server = gethostbyname(argv[1]);
     if (server == NULL) {
         fprintf(stderr,"ERROR, no such host\n");
@@ -58,6 +48,32 @@ int main(int argc, char *argv[])
     serv_addr.sin_port = htons(portno);
     if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
         error("ERROR connecting");
+	} 
+	//----------------------------------end TCP---------------------------//
+	
+	//---------------------------------start UDP--------------------------//
+	else if (strcmp(argv[3], udp1) == 0) //checks to see if udp was in commandline
+	{ 
+    portno = atoi(argv[2]);	
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sockfd < 0) 
+        error("ERROR opening socket");
+    server = gethostbyname(argv[1]);
+    if (server == NULL) {
+        fprintf(stderr,"ERROR, no such host\n");
+        exit(0);
+    }
+    bzero((char *) &serv_addr, sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    bcopy((char *)server->h_addr, 
+         (char *)&serv_addr.sin_addr.s_addr,
+         server->h_length);
+    serv_addr.sin_port = htons(portno);
+    if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
+        error("ERROR connecting");
+	} 
+	//----------------------------------end UDP-------------------------------//
+	
     printf("Please enter the message: ");
     bzero(buffer,256);
     fgets(buffer,255,stdin);

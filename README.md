@@ -20,3 +20,5 @@ You will add a checksum of the file to confirm that the file sent is recieved.  
 Bonus:
 
 The client sends a message if the file is received and checksum matches, else sends a message indicating corrupted file
+
+Initial Socket from: http://www.linuxhowtos.org/C_C++/socket.htm

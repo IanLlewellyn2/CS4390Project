@@ -24,10 +24,27 @@ int main(int argc, char *argv[])
        fprintf(stderr,"usage %s hostname port\n", argv[0]);
        exit(0);
     }
-    portno = atoi(argv[2]);
+	//checking if udp or tcp using strcmp
+	char udp1[3] = "udp";
+	char tcp1[3] = "tcp";
+	
+	//start tcp//
+	if (strcmp(argv[3], tcp1) == 0)
+	{ 
+    portno = atoi(argv[2]);	
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) 
         error("ERROR opening socket");
+	} //end tcp//
+	//start udp//
+	else if (strcmp(argv[3], udp1) == 0)
+	{ 
+    portno = atoi(argv[2]);	
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sockfd < 0) 
+        error("ERROR opening socket");
+	} //end udp//
+	
     server = gethostbyname(argv[1]);
     if (server == NULL) {
         fprintf(stderr,"ERROR, no such host\n");

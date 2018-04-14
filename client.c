@@ -16,29 +16,21 @@ void error(const char *msg)
 
 void askForFile(int sockfd)
 {
-	printf("testing");
 	char buffer[20];
 	bzero(buffer, 20);
-	printf("testing");
 	char file[100000];
 	bzero(file, 100000);
-	printf("testing");
-	printf("What file do you want from the server?");
-	printf("testing");
+//	printf("What file do you want from the server?\n");
+	write(1, "What file you want?", 18);
 	read(0, buffer, 20); //read from user
-	printf("testing");
 	write(sockfd, buffer, 20); //send user input to server
-	printf("testing");
 	bzero(buffer, 20);
 	
 	read(sockfd, buffer, 20); //read in whether the file exists or not
-	printf("testing");
 	write(1, buffer, 20); //write out server response to stdout
-	printf("testing");
 	bzero(buffer, 20);
 	read(sockfd, buffer, 6); //read in the checksum
-	printf("testing");
-	write(1, buffer, 6);
+	write(1, buffer, 6); //write checksum to user
 	bzero(buffer, 20);
 }
 
@@ -51,7 +43,6 @@ int main(int argc, char *argv[])
 	//----------------------------------start TCP------------------------//
 	if (strcmp(argv[3], tcp1) == 0) //checks to see if tcp was in commandline 
 	{ 
-		printf("tcp btw");
 		int sockfd, portno, n;
 		struct sockaddr_in serv_addr;
 		struct hostent *server;

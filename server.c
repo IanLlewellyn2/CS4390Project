@@ -32,10 +32,12 @@ void createChecksum(FILE* file, int size, int socket)
 }
 
 
-void checkAndSendFile(char fileName[], int lengthOfName, int newsockfd)
+void checkAndSendFile(int newsockfd)
 {
-	int i, n;
+	int i, n, lengthOfName;
 	FILE* data;	
+	char fileName[20];
+	lengthOfName = read(newsockfd, fileName, 20);
 		
 	fileName[lengthOfName] = '\0'; //convert to a string by adding a null terminator
 	
@@ -108,7 +110,7 @@ int main(int argc, char *argv[])
 		clilen = sizeof(cli_addr);
 		newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
 		
-		if (newsockfd < 0) 
+/*		if (newsockfd < 0) 
 		{
           error("ERROR on accept");
 		}
@@ -127,6 +129,8 @@ int main(int argc, char *argv[])
 		{			
 			error("ERROR writing to socket");
 		}
+*/
+		checkAndSendFile(newsockfd);
 		
 		close(newsockfd);
 		close(sockfd);

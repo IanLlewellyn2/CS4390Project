@@ -25,6 +25,7 @@ void askForFile(int newsockfd)
 	read(newsockfd, buffer, 20); //read in whether the file exists or not
 	write(1, buffer, 20); //write out server response to stdout
 	read(newsockfd, buffer, 6); //read in the checksum
+	write(1, buffer, 6);
 	
 }
 

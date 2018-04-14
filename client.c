@@ -16,15 +16,24 @@ void error(const char *msg)
 
 void askForFile(int sockfd)
 {
+	printf("testing");
 	char buffer[20];
+	printf("testing");
 	char file[100000000];
+	printf("testing");
 	printf("What file do you want from the server?");
+	printf("testing");
 	read(0, buffer, 20); //read from user
+	printf("testing");
 	write(sockfd, buffer, 20); //send user input to server
+	printf("testing");
 	
 	read(sockfd, buffer, 20); //read in whether the file exists or not
+	printf("testing");
 	write(1, buffer, 20); //write out server response to stdout
+	printf("testing");
 	read(sockfd, buffer, 6); //read in the checksum
+	printf("testing");
 	write(1, buffer, 6);
 	
 }

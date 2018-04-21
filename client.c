@@ -22,8 +22,8 @@ void askForFile(int sockfd)
 	bzero(file, 100000);
 //	printf("What file do you want from the server?\n");
 	write(1, "What file you want? ", 20);
-	read(0, buffer, 20); //read from user
-	write(sockfd, buffer, 20); //send user input to server
+	int lengthOfFileName = read(0, buffer, 20); //read from user
+	write(sockfd, buffer, lengthOfFileName); //send user input to server
 	bzero(buffer, 20);
 	
 	read(sockfd, buffer, 20); //read in whether the file exists or not

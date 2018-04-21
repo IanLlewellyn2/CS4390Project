@@ -41,6 +41,7 @@ void checkAndSendFile(int newsockfd)
 	lengthOfName = read(newsockfd, fileName, 20);
 		
 	fileName[lengthOfName] = '\0'; //convert to a string by adding a null terminator
+	printf("file name length: %d\n", lengthOfName);
 	
 	if( access( fileName, F_OK ) != -1 ) 
 	{

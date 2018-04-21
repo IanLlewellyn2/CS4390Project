@@ -42,6 +42,7 @@ void checkAndSendFile(int newsockfd)
 		
 	fileName[lengthOfName] = '\0'; //convert to a string by adding a null terminator
 	printf("file name length: %d\n", lengthOfName);
+	printf("%s is the string you are looking for\n", fileName);
 	
 	if( access( fileName, F_OK ) != -1 ) 
 	{
@@ -51,8 +52,7 @@ void checkAndSendFile(int newsockfd)
 	else 
 	{
 		//file does not exist
-		n = write(newsockfd, "File does not exist\n", 19); 
-		printf("%s is the string you are looking for\n", fileName);
+		n = write(newsockfd, "File does not exist\n", 19); 		
 		//this probably needs a pointer or something
 		//good luck future ian
 		//fileName is blank in the printf
@@ -66,6 +66,8 @@ void checkAndSendFile(int newsockfd)
 	int sizeOfFile = ftell(data); //get the length of the file
 	char buffer[sizeOfFile];
 	fseek(data, 0, SEEK_SET); //go back to the start of the file
+	
+	printf("%d is the size of the file\n", sizeOfFile);
 	
 	//generate a checksum - we want to get 6 chars from the file
 	//first char, then 1/5, 2,5, 3/5, 4/5, last

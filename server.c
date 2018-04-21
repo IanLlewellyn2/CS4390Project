@@ -16,18 +16,19 @@ void error(const char *msg)
 
 void createChecksum(FILE* file, int size, int socket)
 {
-	char * checksum;
+	printf("Entering checksum method\n");
+	char checksum[6];
 	bzero(checksum, 6);
 	int i, j;
 	fseek(file, 0, SEEK_SET); // set fd to start of file
 	for(i = 0; i < 5; i++)
 	{
-		fread(checksum, 1, 1, file);
+		fread(checksum[i], 1, 1, file);
 		j = (i+1) * (size/5);
 		fseek(file, j, SEEK_SET); //set the next read point for the next iteration of the loop
 	}	
 	fseek(file, size-1, SEEK_SET); //set to end of file
-	fread(checksum, 1, 1, file); //get last char as part of the checksum
+	fread(checksum[5], 1, 1, file); //get last char as part of the checksum
 	write(socket, checksum, 6);
 	
 }

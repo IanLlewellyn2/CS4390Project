@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 		}
 		
 		fromlen = sizeof(struct sockaddr_in);
-		while (1) 
+/*		while (1) 
 		{
 			n = recvfrom(sock,buf,1024,0,(struct sockaddr *)&from,&fromlen);
 			if (n < 0)
@@ -194,7 +194,9 @@ int main(int argc, char *argv[])
 			{
 				error("sendto");
 			}
-		}
+		}*/
+		
+		checkAndSendFile(sock);
 	}
 	
     return 0;  

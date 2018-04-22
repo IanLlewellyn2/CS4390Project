@@ -19,7 +19,7 @@ void createChecksum(FILE* file, int size, int socket)
 	printf("Entering checksum method\n");
 	fseek(file, 0, SEEK_SET);
 	unsigned char checksum = 0;
-	char * charFromFile;
+	char * charFromFile = malloc(1);
 	char charToCompare;
 	int i;
 	for(i = 0; i < size; i++)
@@ -29,6 +29,7 @@ void createChecksum(FILE* file, int size, int socket)
 		printf("loop2\n");
 		checksum -= *charFromFile;
 	}
+	free(charFromFile);
 	printf("end of loop\n");
 	char *pChecksum = &checksum;
 	printf("start of write\n");

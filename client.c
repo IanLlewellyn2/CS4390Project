@@ -30,7 +30,7 @@ void askForFile(int sockfd)
 	write(1, buffer, 20); //write out server response to stdout
 	bzero(buffer, 20);
 	read(sockfd, buffer, 1); //read in the checksum
-	printf("Here is the checksum for your file: %u\n", buffer);
+	printf("\nHere is the checksum for your file: %u\n", buffer[0]);
 //	write(1, buffer, 6); //write checksum to user
 	bzero(buffer, 20);
 }

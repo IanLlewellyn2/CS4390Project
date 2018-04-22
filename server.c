@@ -21,8 +21,10 @@ void createChecksum(FILE* file, int size, int socket)
 	bzero(checksum, 6);
 	int i, j;
 	fseek(file, 0, SEEK_SET); // set fd to start of file
+	printf("Starting Loop\n");
 	for(i = 0; i < 5; i++)
 	{
+		printf("In Loop\n");
 		fread(checksum[i], 1, 1, file);
 		j = (i+1) * (size/5);
 		fseek(file, j, SEEK_SET); //set the next read point for the next iteration of the loop

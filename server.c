@@ -21,7 +21,8 @@ void createChecksum(FILE* file, int size, int socket)
 	unsigned char checksum = 0;
 	char * charFromFile;
 	char charToCompare;
-	for(int i = 0; i < size; i++)
+	int i;
+	for(i = 0; i < size; i++)
 	{
 		fread(charFromFile, 1, 1, file);
 		checksum -= *charFromFile;

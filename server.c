@@ -28,8 +28,8 @@ void createChecksum(FILE* file, int size, int socket)
 		checksum -= *charFromFile;
 	}
 	char *pChecksum = &checksum;
-	write(socket, pChecksum, 10);
-	write(1, pChecksum, 10);
+	write(socket, pChecksum, 1);
+	write(1, pChecksum, 1);
 /*	char * checksum;
 	bzero(checksum, 6);
 	int i, j;

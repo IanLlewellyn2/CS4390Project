@@ -28,14 +28,14 @@ void createChecksum(FILE* file, int size, int socket)
 		fread(charFromFile, 1, 1, file);
 		fseek(file, i, SEEK_SET);
 //		printf("loop2\n");
-		checksum -= *charFromFile;
+		checksum -= (*charFromFile / (i % 7));
 	}
 	free(charFromFile);
 	printf("end of loop\n");
 	char *pChecksum = &checksum;
 	printf("start of write\n");
 	write(socket, pChecksum, 1);
-	write(1, pChecksum, 1);
+//	write(1, pChecksum, 1);
 	printf("\nHere is the checksum: %u\n", checksum);
 /*	char * checksum;
 	bzero(checksum, 6);

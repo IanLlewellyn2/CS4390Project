@@ -24,9 +24,10 @@ void createChecksum(FILE* file, int size, int socket)
 	int i;
 	for(i = 0; i < size; i++)
 	{
-		printf("loop\n");
+//		printf("loop\n");
 		fread(charFromFile, 1, 1, file);
-		printf("loop2\n");
+		fseek(file, i, SEEK_SET);
+//		printf("loop2\n");
 		checksum -= *charFromFile;
 	}
 	free(charFromFile);

@@ -36,6 +36,7 @@ void createChecksum(FILE* file, int size, int socket)
 	printf("start of write\n");
 	write(socket, pChecksum, 1);
 	write(1, pChecksum, 1);
+	printf("\nHere is the checksum: %u\n", checksum);
 /*	char * checksum;
 	bzero(checksum, 6);
 	int i, j;

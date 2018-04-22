@@ -27,8 +27,9 @@ void createChecksum(FILE* file, int size, int socket)
 		fread(charFromFile, 1, 1, file);
 		checksum -= *charFromFile;
 	}
-	write(socket, *checksum, 10);
-	write(1, *checksum, 10);
+	char *pChecksum = &checksum;
+	write(socket, pChecksum, 10);
+	write(1, pChecksum, 10);
 /*	char * checksum;
 	bzero(checksum, 6);
 	int i, j;

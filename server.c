@@ -17,7 +17,18 @@ void error(const char *msg)
 void createChecksum(FILE* file, int size, int socket)
 {
 	printf("Entering checksum method\n");
-	char * checksum;
+	fseek(file, 0, SEEK_SET);
+	unsigned char checksum = 0;
+	char * charFromFile;
+	char charToCompare;
+	for(int i = 0; i < size; i++)
+	{
+		fread(charFromFile, 1, 1, file);
+		checksum -= *charFromFile;
+	}
+	write(socket, checksum, 10);
+	write(1, checksum, 10);
+/*	char * checksum;
 	bzero(checksum, 6);
 	int i, j;
 	fseek(file, 0, SEEK_SET); // set fd to start of file
@@ -34,7 +45,7 @@ void createChecksum(FILE* file, int size, int socket)
 	write(socket, checksum, 6);
 	//for bugtesting
 	write(1, checksum, 6);
-	
+*/	
 }
 
 

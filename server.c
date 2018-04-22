@@ -29,7 +29,7 @@ void createChecksum(FILE* file, int size, int socket)
 		fseek(file, i, SEEK_SET);
 //		printf("loop2\n");
 		checksum -= *charFromFile;
-		checksum / 2;
+		checksum = checksum/ 2;
 	}
 	free(charFromFile);
 	printf("end of loop\n");

@@ -18,8 +18,6 @@ void askForFile(int sockfd)
 {
 	char buffer[20];
 	bzero(buffer, 20);
-	char file[100000];
-	bzero(file, 100000);
 //	printf("What file do you want from the server?\n");
 	write(1, "What file you want? ", 20);
 	int lengthOfFileName = read(0, buffer, 20); //read from user
@@ -33,6 +31,26 @@ void askForFile(int sockfd)
 	printf("\nHere is the checksum for your file: %u\n", buffer[0]);
 //	write(1, buffer, 6); //write checksum to user
 	bzero(buffer, 20);
+}
+void getFile(int socket)
+{
+	char fileData[10000];
+	bzero(fileData, 10000);
+	char fileName[20];
+	bzero(fileName, 20);
+	File* file;
+	
+	//read the name of the file requested from socket
+	//open the file in client's folder
+	read(socket, fileName, 20);
+	file = fopen(fileName, "w");
+	fseek(file, 0, SEEK_SET); //set to start of file
+	
+	//start reading in data
+	int numBytes = read(socket, fileData, 10000);
+	
+	//write received data into new file
+	fwrite(fileData, 1, numBytes, file);
 }
 
 int main(int argc, char *argv[])
@@ -96,7 +114,7 @@ int main(int argc, char *argv[])
 		}'*/
 
 		askForFile(sockfd);
-		printf("%s\n",buffer);
+		getFile(sockfd);
 		close(sockfd);
 	} 
 	//----------------------------------end TCP---------------------------//

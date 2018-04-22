@@ -26,6 +26,7 @@ void createChecksum(FILE* file, int size, int socket)
 	{
 		printf("loop\n");
 		fread(charFromFile, 1, 1, file);
+		printf("loop2\n");
 		checksum -= *charFromFile;
 	}
 	printf("end of loop\n");

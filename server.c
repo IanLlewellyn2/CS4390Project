@@ -16,46 +16,28 @@ void error(const char *msg)
 
 void createChecksum(FILE* file, int size, int socket)
 {
-	printf("Entering checksum method\n");
 	fseek(file, 0, SEEK_SET);
 	unsigned char checksum = 0;
 	char * charFromFile = malloc(1);
-	char charToCompare;
+//	char charToCompare;
 	int i;
+	
+	//walk through the file
+	//read in one char at a time
+	//subtract that char from the checksum char
+	//divide in order to notice if packets come in in the wrong order
 	for(i = 0; i < size; i++)
 	{
-//		printf("loop\n");
 		fread(charFromFile, 1, 1, file);
 		fseek(file, i, SEEK_SET);
-//		printf("loop2\n");
 		checksum -= *charFromFile;
 		checksum = checksum/ 2;
 	}
 	free(charFromFile);
-	printf("end of loop\n");
+	//create a pointer so the checksum can be sent to client
 	char *pChecksum = &checksum;
-	printf("start of write\n");
 	write(socket, pChecksum, 1);
-//	write(1, pChecksum, 1);
 	printf("\nHere is the checksum: %u\n", checksum);
-/*	char * checksum;
-	bzero(checksum, 6);
-	int i, j;
-	fseek(file, 0, SEEK_SET); // set fd to start of file
-	printf("Starting Loop\n");
-	for(i = 0; i < 5; i++)
-	{
-		printf("In Loop\n");
-		fread(checksum, 1, 1, file);
-		j = (i+1) * (size/5);
-		fseek(file, j, SEEK_SET); //set the next read point for the next iteration of the loop
-	}	
-	fseek(file, size-1, SEEK_SET); //set to end of file
-	fread(checksum, 1, 1, file); //get last char as part of the checksum
-	write(socket, checksum, 6);
-	//for bugtesting
-	write(1, checksum, 6);
-*/	
 }
 
 

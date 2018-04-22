@@ -19,7 +19,6 @@ void createChecksum(FILE* file, int size, int socket)
 	fseek(file, 0, SEEK_SET);
 	unsigned char checksum = 0;
 	char * charFromFile = malloc(1);
-//	char charToCompare;
 	int i;
 	
 	//walk through the file
@@ -33,11 +32,12 @@ void createChecksum(FILE* file, int size, int socket)
 		checksum -= *charFromFile;
 		checksum = checksum/ 2;
 	}
+	//free memory from malloc call
 	free(charFromFile);
 	//create a pointer so the checksum can be sent to client
 	char *pChecksum = &checksum;
 	write(socket, pChecksum, 1);
-	printf("\nHere is the checksum: %u\n", checksum);
+	printf("Here is the checksum: %u\n", checksum);
 }
 
 

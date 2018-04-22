@@ -24,10 +24,13 @@ void createChecksum(FILE* file, int size, int socket)
 	int i;
 	for(i = 0; i < size; i++)
 	{
+		printf("loop\n");
 		fread(charFromFile, 1, 1, file);
 		checksum -= *charFromFile;
 	}
+	printf("end of loop\n");
 	char *pChecksum = &checksum;
+	printf("start of write\n");
 	write(socket, pChecksum, 1);
 	write(1, pChecksum, 1);
 /*	char * checksum;

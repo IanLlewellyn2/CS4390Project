@@ -30,7 +30,7 @@ void createChecksum(FILE* file, int size, int socket)
 		fseek(file, j, SEEK_SET); //set the next read point for the next iteration of the loop
 	}	
 	fseek(file, size-1, SEEK_SET); //set to end of file
-	fread(checksum[5], 1, 1, file); //get last char as part of the checksum
+	fread(checksum, 1, 1, file); //get last char as part of the checksum
 	write(socket, checksum, 6);
 	//for bugtesting
 	write(1, checksum, 6);

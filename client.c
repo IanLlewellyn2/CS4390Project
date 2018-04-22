@@ -29,8 +29,9 @@ void askForFile(int sockfd)
 	read(sockfd, buffer, 20); //read in whether the file exists or not
 	write(1, buffer, 20); //write out server response to stdout
 	bzero(buffer, 20);
-	read(sockfd, buffer, 6); //read in the checksum
-	write(1, buffer, 6); //write checksum to user
+	read(sockfd, buffer, 1); //read in the checksum
+	printf("Here is the checksum for your file: %u\n", buffer);
+//	write(1, buffer, 6); //write checksum to user
 	bzero(buffer, 20);
 }
 

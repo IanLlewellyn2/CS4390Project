@@ -82,6 +82,9 @@ void getFile(int socket)
 	//free memory from malloc call
 	free(charFromFile);
 	printf("Here is the client version of the checksum: %u\n", checksum);
+	printf("Here is the global checksum: %u\n", gChecksum);
+	if(checksum == gChecksum)
+		printf("Checksums match, file successfully transferred\n");
 }
 
 int main(int argc, char *argv[])

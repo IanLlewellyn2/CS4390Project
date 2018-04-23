@@ -15,6 +15,77 @@ void error(const char *msg)
     perror(msg);
     exit(0);
 }
+void askForFileUDP(int sockfd)
+{
+	char buffer[20];
+	bzero(buffer, 20);
+	printf("What file do you want?\n");
+	int lengthOfFileName = read(0, buffer, 20); //read from user
+	send(sockfd, buffer, lengthOfFileName - 1, 0); //send user input to server
+	bzero(buffer, 20);
+	
+	recv(sockfd, buffer, 20, 0); //read in whether the file exists or not
+	write(1, buffer, 20); //write out server response to stdout
+	bzero(buffer, 20);
+	recv(sockfd, buffer, 1, 0); //read in the checksum
+	gChecksum = buffer[0];
+	printf("\nHere is the server side checksum for your file: %u\n", buffer[0]);
+//	write(1, buffer, 6); //write checksum to user
+	bzero(buffer, 20);
+}
+void getFileUDP(int socket)
+{
+	int numBytes = 10000, i;
+	char fileData[10000];
+	bzero(fileData, 10000);
+	char fileName[20];
+	bzero(fileName, 20);
+	FILE* file;
+	
+	//read the name of the file requested from socket
+	//open the file in client's folder
+	recv(socket, fileName, 20, 0);
+	file = fopen(fileName, "w+");
+	fseek(file, 0, SEEK_SET); //set to start of file
+	
+	//start reading in data
+	while(numBytes == 10000)
+	{
+		numBytes = recv(socket, fileData, 10000, 0);
+//		printf("Got %d bytes to write into my file\n", numBytes);
+		//write received data into new file
+		fwrite(fileData, 1, numBytes, file);
+	}
+	
+	//calculate checksum
+	fseek(file, 0, SEEK_END);
+	int sizeOfFile = ftell(file);
+//	printf("The size of the file is %d\n", sizeOfFile);
+	
+	fseek(file, 0, SEEK_SET);
+	unsigned char checksum = 0;
+	char * charFromFile = malloc(1);
+	
+	//walk through the file
+	//read in one char at a time
+	//subtract that char from the checksum char
+	//divide in order to notice if packets come in in the wrong order
+	for(i = 0; i < sizeOfFile; i++)
+	{
+		fread(charFromFile, 1, 1, file);
+		fseek(file, i, SEEK_SET);
+		checksum -= *charFromFile;
+		checksum = checksum/ 2;
+	}
+	//free memory from malloc call
+	free(charFromFile);
+	printf("Here is the client version of the checksum: %u\n", checksum);
+//	printf("Here is the global checksum: %u\n", gChecksum);
+	if(checksum == gChecksum)
+		printf("Checksums match, file successfully transferred\n");
+	else
+		printf("Checksums do not match, something went wrong\n");
+}
 
 void askForFile(int sockfd)
 {
@@ -196,8 +267,8 @@ int main(int argc, char *argv[])
 		write(1,"Got an ack: ",12);
 		write(1,buffer,n); */
 		
-		askForFile(sock);
-		getFile(sock);
+		askForFileUDP(sock);
+		getFileUDP(sock);
 		close(sock);
 	} 
 	//----------------------------------end UDP-------------------------------//

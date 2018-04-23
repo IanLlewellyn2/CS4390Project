@@ -31,7 +31,7 @@ void askForFile(int sockfd)
 	bzero(buffer, 20);
 	read(sockfd, buffer, 1); //read in the checksum
 	gChecksum = buffer[0];
-	printf("\nHere is the checksum for your file: %u\n", buffer[0]);
+	printf("\nHere is the server side checksum for your file: %u\n", buffer[0]);
 //	write(1, buffer, 6); //write checksum to user
 	bzero(buffer, 20);
 }
@@ -54,7 +54,7 @@ void getFile(int socket)
 	while(numBytes == 10000)
 	{
 		numBytes = read(socket, fileData, 10000);
-		printf("Got %d bytes to write into my file\n", numBytes);
+//		printf("Got %d bytes to write into my file\n", numBytes);
 		//write received data into new file
 		fwrite(fileData, 1, numBytes, file);
 	}
@@ -81,7 +81,7 @@ void getFile(int socket)
 	}
 	//free memory from malloc call
 	free(charFromFile);
-//	printf("Here is the client version of the checksum: %u\n", checksum);
+	printf("Here is the client version of the checksum: %u\n", checksum);
 //	printf("Here is the global checksum: %u\n", gChecksum);
 	if(checksum == gChecksum)
 		printf("Checksums match, file successfully transferred\n");

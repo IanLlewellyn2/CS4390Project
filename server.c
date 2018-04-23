@@ -65,7 +65,7 @@ void checkAndSendFileUDP(int newsockfd)
 	int i, n, lengthOfName;
 	FILE* data;	
 	char fileName[20];
-	lengthOfName = read(newsockfd, fileName, 20);
+	lengthOfName = recv(newsockfd, fileName, 20, 0);
 		
 	fileName[lengthOfName] = '\0'; //convert to a string by adding a null terminator
 	printf("file name length: %d\n", lengthOfName);

@@ -60,7 +60,7 @@ void getFile(int socket)
 	}
 	
 	//calculate checksum
-	fseek(data, 0, SEEK_END);
+	fseek(file, 0, SEEK_END);
 	int sizeOfFile = ftell(data);
 	
 	fseek(file, 0, SEEK_SET);

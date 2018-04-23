@@ -38,7 +38,7 @@ void getFile(int socket)
 	bzero(fileData, 10000);
 	char fileName[20];
 	bzero(fileName, 20);
-	File* file;
+	FILE* file;
 	
 	//read the name of the file requested from socket
 	//open the file in client's folder

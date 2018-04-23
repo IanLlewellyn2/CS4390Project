@@ -42,6 +42,7 @@ void createChecksum(FILE* file, int size, int socket)
 
 void sendFile(FILE* file, int size, int socket)
 {
+	//IF THE SLEEP IS REMOVED IT WILL BREAK
 	sleep(1); //to make sure the fileName doesnt start reading data
 	char fileData[10000];
 	bzero(fileData, 10000);

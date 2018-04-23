@@ -17,22 +17,23 @@ void error(const char *msg)
 }
 void askForFileUDP(int sockfd, unsigned int length, struct sockaddr_in server, struct sockaddr_in from)
 {
+	int n;
 	char buffer[20];
 	bzero(buffer, 20);
 	printf("What file do you want?\n");
 	int lengthOfFileName = read(0, buffer, 20); //read from user
-	sendto(sockfd, buffer, lengthOfFileName - 1, 0,(const struct sockaddr *)&server,length); //send user input to server
+	n = sendto(sockfd, buffer, lengthOfFileName - 1, 0,(const struct sockaddr *)&server,length); //send user input to server
 	bzero(buffer, 20);
 	
 	printf("testing 1");
 	
-	recvfrom(sockfd, buffer, 20, 0,(struct sockaddr *)&from, &length); //read in whether the file exists or not
+	n = recvfrom(sockfd, buffer, 20, 0,(struct sockaddr *)&from, &length); //read in whether the file exists or not
 	
 	printf("testing 2");
 	
 	write(1, buffer, 20); //write out server response to stdout
 	bzero(buffer, 20);
-	recvfrom(sockfd, buffer, 1, 0,(struct sockaddr *)&from, &length); //read in the checksum
+	n = recvfrom(sockfd, buffer, 1, 0,(struct sockaddr *)&from, &length); //read in the checksum
 	gChecksum = buffer[0];
 	printf("\nHere is the server side checksum for your file: %u\n", buffer[0]);
 	bzero(buffer, 20);

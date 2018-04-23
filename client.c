@@ -62,6 +62,7 @@ void getFile(int socket)
 	//calculate checksum
 	fseek(file, 0, SEEK_END);
 	int sizeOfFile = ftell(file);
+	printf("The size of the file is %d\n", sizeOfFile);
 	
 	fseek(file, 0, SEEK_SET);
 	unsigned char checksum = 0;

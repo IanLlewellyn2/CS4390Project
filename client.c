@@ -47,7 +47,7 @@ void getFile(int socket)
 	//read the name of the file requested from socket
 	//open the file in client's folder
 	read(socket, fileName, 20);
-	file = fopen(fileName, "w");
+	file = fopen(fileName, "w+");
 	fseek(file, 0, SEEK_SET); //set to start of file
 	
 	//start reading in data

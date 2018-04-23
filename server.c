@@ -37,7 +37,7 @@ void createChecksum(FILE* file, int size, int socket)
 	//create a pointer so the checksum can be sent to client
 	char *pChecksum = &checksum;
 	write(socket, pChecksum, 1);
-//	printf("Here is the checksum: %u\n", checksum);
+	printf("Here is the checksum: %u\n", checksum);
 }
 
 void sendFile(FILE* file, int size, int socket)
@@ -68,8 +68,8 @@ void checkAndSendFile(int newsockfd)
 	lengthOfName = read(newsockfd, fileName, 20);
 		
 	fileName[lengthOfName] = '\0'; //convert to a string by adding a null terminator
-//	printf("file name length: %d\n", lengthOfName);
-//	printf("%s is the string you are looking for\n", fileName);
+	printf("file name length: %d\n", lengthOfName);
+	printf("%s is the string you are looking for\n", fileName);
 	
 	if( access( fileName, F_OK ) != -1 ) 
 	{
@@ -94,7 +94,7 @@ void checkAndSendFile(int newsockfd)
 	char buffer[sizeOfFile];
 	fseek(data, 0, SEEK_SET); //go back to the start of the file
 	
-//	printf("%d is the size of the file\n", sizeOfFile);
+	printf("%d is the size of the file\n", sizeOfFile);
 	
 	//generate a checksum - we want to get 6 chars from the file
 	//first char, then 1/5, 2,5, 3/5, 4/5, last

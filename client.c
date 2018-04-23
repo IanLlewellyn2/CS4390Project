@@ -21,7 +21,7 @@ void askForFileUDP(int sockfd, unsigned int length, struct sockaddr_in server, s
 	char buffer[20];
 	bzero(buffer, 20);
 	printf("What file do you want?\n");
-	int lengthOfFileName = fgets(buffer, 20, stdin); //read from user
+	int lengthOfFileName = read(0, buffer, 20); //read from user
 	n = sendto(sockfd, buffer, lengthOfFileName - 1, 0,(const struct sockaddr *)&server,length); //send user input to server
 	bzero(buffer, 20);
 	
@@ -209,23 +209,6 @@ int main(int argc, char *argv[])
 		{
 			error("ERROR connecting");
 		}
-		
-/*		printf("Please enter the message: ");
-		bzero(buffer,256);
-		fgets(buffer,255,stdin);
-		n = write(sockfd,buffer,strlen(buffer));
-		if (n < 0)
-		{			
-			error("ERROR writing to socket");
-		}
-		
-		bzero(buffer,256);
-		n = read(sockfd,buffer,255);
-		
-		if (n < 0) 
-		{
-			error("ERROR reading from socket");
-		}'*/
 
 		askForFile(sockfd);
 		getFile(sockfd);
@@ -245,7 +228,7 @@ int main(int argc, char *argv[])
 		if (argc < 3) 
 		{ 
 			printf("Usage: server port\n");
-            exit(1);
+        	   	exit(1);
 		}
 		
 		sock= socket(AF_INET, SOCK_DGRAM, 0);
@@ -262,17 +245,6 @@ int main(int argc, char *argv[])
 		server.sin_port = htons(atoi(argv[2]));
 		length=sizeof(struct sockaddr_in);
 		
-/*		printf("Please enter the message: ");
-		bzero(buffer,256);
-		fgets(buffer,255,stdin);
-		n=sendto(sock,buffer, strlen(buffer),0,(const struct sockaddr *)&server,length);
-		
-		if (n < 0) error("Sendto");
-		n = recvfrom(sock,buffer,256,0,(struct sockaddr *)&from, &length);
-		
-		if (n < 0) error("recvfrom");
-		write(1,"Got an ack: ",12);
-		write(1,buffer,n); */
 		
 		askForFileUDP(sock, length, server, from);
 		getFileUDP(sock, length, server, from);

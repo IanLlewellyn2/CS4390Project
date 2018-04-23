@@ -14,6 +14,96 @@ void error(const char *msg)
     exit(1);
 }
 
+void createChecksumUDP(FILE* file, int size, int socket)
+{
+	fseek(file, 0, SEEK_SET);
+	unsigned char checksum = 0;
+	char * charFromFile = malloc(1);
+	int i;
+	
+	//walk through the file
+	//read in one char at a time
+	//subtract that char from the checksum char
+	//divide in order to notice if packets come in in the wrong order
+	for(i = 0; i < size; i++)
+	{
+		fread(charFromFile, 1, 1, file);
+		fseek(file, i, SEEK_SET);
+		checksum -= *charFromFile;
+		checksum = checksum/ 2;
+	}
+	//free memory from malloc call
+	free(charFromFile);
+	//create a pointer so the checksum can be sent to client
+	char *pChecksum = &checksum;
+	send(socket, pChecksum, 1, 0);
+	printf("Here is the checksum: %u\n", checksum);
+}
+
+void sendFileUDP(FILE* file, int size, int socket)
+{
+	//IF THE SLEEP IS REMOVED IT WILL BREAK
+	sleep(1); //to make sure the fileName doesnt start reading data
+	int i;
+	char fileData[10000];
+	bzero(fileData, 10000);
+	int numBytesRead;
+	
+	//read into fileData buffer, then send to client via socket
+	fseek(file, 0, SEEK_SET);
+	for(i = 0; i * 10000 < size; i++)
+	{
+		numBytesRead = fread(fileData, 1, 10000, file);
+		send(socket, fileData, numBytesRead, 0);
+		bzero(fileData, 10000);
+//		sleep(1);
+	}
+}
+
+void checkAndSendFileUDP(int newsockfd)
+{
+	int i, n, lengthOfName;
+	FILE* data;	
+	char fileName[20];
+	lengthOfName = read(newsockfd, fileName, 20);
+		
+	fileName[lengthOfName] = '\0'; //convert to a string by adding a null terminator
+	printf("file name length: %d\n", lengthOfName);
+	printf("%s is the string you are looking for\n", fileName);
+	
+	if( access( fileName, F_OK ) != -1 ) 
+	{
+		//file exists
+		n = send(newsockfd, "File exists\n", 11, 0);
+	} 
+	else 
+	{
+		//file does not exist
+		n = send(newsockfd, "File does not exist\n", 19, 0); 		
+		//this probably needs a pointer or something
+		//good luck future ian
+		//fileName is blank in the printf
+		exit(0);
+	}
+	
+	data = fopen(fileName, "r");
+		
+	
+	fseek(data, 0, SEEK_END);
+	int sizeOfFile = ftell(data); //get the length of the file
+	char buffer[sizeOfFile];
+	fseek(data, 0, SEEK_SET); //go back to the start of the file
+	
+	printf("%d is the size of the file\n", sizeOfFile);
+	
+	//generate a checksum - we want to get 6 chars from the file
+	//first char, then 1/5, 2,5, 3/5, 4/5, last
+	createChecksumUDP(data, sizeOfFile, newsockfd);
+	send(newsockfd, fileName, lengthOfName, 0); //send client requested file name so client can open the file
+	sendFileUDP(data, sizeOfFile, newsockfd);
+	
+}
+
 void createChecksum(FILE* file, int size, int socket)
 {
 	fseek(file, 0, SEEK_SET);

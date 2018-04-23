@@ -56,7 +56,7 @@ void sendFileUDP(FILE* file, int size, int socket, struct sockaddr_in from, sock
 		numBytesRead = fread(fileData, 1, 10000, file);
 		sendto(socket, fileData, numBytesRead, 0, (struct sockaddr *)&from,fromlen);
 		bzero(fileData, 10000);
-//		sleep(1);
+		sleep(1);
 	}
 }
 

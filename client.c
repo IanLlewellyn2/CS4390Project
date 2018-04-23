@@ -21,7 +21,7 @@ void askForFileUDP(int sockfd, unsigned int length, struct sockaddr_in server, s
 	char buffer[20];
 	bzero(buffer, 20);
 	printf("What file do you want?\n");
-	int lengthOfFileName = read(0, buffer, 20); //read from user
+	int lengthOfFileName = fgets(buffer, 20, stdin); //read from user
 	n = sendto(sockfd, buffer, lengthOfFileName - 1, 0,(const struct sockaddr *)&server,length); //send user input to server
 	bzero(buffer, 20);
 	

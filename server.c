@@ -36,7 +36,7 @@ void createChecksumUDP(FILE* file, int size, int socket, struct sockaddr_in from
 	free(charFromFile);
 	//create a pointer so the checksum can be sent to client
 	char *pChecksum = &checksum;
-	sendto(socket, pChecksum, 1, 0, (struct sockaddr *)&from,&fromlen);
+	sendto(socket, pChecksum, 1, 0, (struct sockaddr *)&from,fromlen);
 	printf("Here is the checksum: %u\n", checksum);
 }
 
@@ -54,7 +54,7 @@ void sendFileUDP(FILE* file, int size, int socket, struct sockaddr_in from, sock
 	for(i = 0; i * 10000 < size; i++)
 	{
 		numBytesRead = fread(fileData, 1, 10000, file);
-		sendto(socket, fileData, numBytesRead, 0, (struct sockaddr *)&from,&fromlen);
+		sendto(socket, fileData, numBytesRead, 0, (struct sockaddr *)&from,fromlen);
 		bzero(fileData, 10000);
 //		sleep(1);
 	}
@@ -74,12 +74,12 @@ void checkAndSendFileUDP(int newsockfd, struct sockaddr_in from, socklen_t froml
 	if(access( fileName, F_OK ) != -1 ) 
 	{
 		//file exists
-		n = sendto(newsockfd, "File exists\n", 11, 0, (struct sockaddr *)&from,&fromlen);
+		n = sendto(newsockfd, "File exists\n", 11, 0, (struct sockaddr *)&from,fromlen);
 	} 
 	else 
 	{
 		//file does not exist
-		n = sendto(newsockfd, "File does not exist\n", 19, 0, (struct sockaddr *)&from,&fromlen);	
+		n = sendto(newsockfd, "File does not exist\n", 19, 0, (struct sockaddr *)&from,fromlen);	
 		//this probably needs a pointer or something
 		//good luck future ian
 		//fileName is blank in the printf
@@ -99,7 +99,7 @@ void checkAndSendFileUDP(int newsockfd, struct sockaddr_in from, socklen_t froml
 	//generate a checksum - we want to get 6 chars from the file
 	//first char, then 1/5, 2,5, 3/5, 4/5, last
 	createChecksumUDP(data, sizeOfFile, newsockfd, from, fromlen);
-	sendto(newsockfd, fileName, lengthOfName, 0, (struct sockaddr *)&from,&fromlen); //send client requested file name so client can open the file
+	sendto(newsockfd, fileName, lengthOfName, 0, (struct sockaddr *)&from,fromlen); //send client requested file name so client can open the file
 	sendFileUDP(data, sizeOfFile, newsockfd, from, fromlen);
 	
 }

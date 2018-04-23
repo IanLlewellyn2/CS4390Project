@@ -49,7 +49,7 @@ void getFile(int socket)
 	//start reading in data
 	int numBytes = read(socket, fileData, 10000);
 	printf("Got %d bytes to write into my file\n", numBytes);
-	
+	//
 	//write received data into new file
 	fwrite(fileData, 1, numBytes, file);
 }

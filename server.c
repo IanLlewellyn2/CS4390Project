@@ -245,21 +245,6 @@ int main(int argc, char *argv[])
           error("ERROR on accept");
 		}
 		
-/*		bzero(buffer,256);
-		n = read(newsockfd,buffer,255);
-		if (n < 0)
-		{
-			error("ERROR reading from socket");
-		}
-		
-		printf("Here is the message: %s\n",buffer);
-		n = write(newsockfd,"I got your message",18);
-		
-		if (n < 0)
-		{			
-			error("ERROR writing to socket");
-		}
-*/
 		checkAndSendFile(newsockfd);
 		
 		close(newsockfd);
@@ -299,23 +284,6 @@ int main(int argc, char *argv[])
 		}
 		
 		fromlen = sizeof(struct sockaddr_in);
-/*		while (1) 
-		{
-			n = recvfrom(sock,buf,1024,0,(struct sockaddr *)&from,&fromlen);
-			if (n < 0)
-			{				
-				error("recvfrom");
-			}
-			
-			write(1,"Received a datagram: ",21);
-			write(1,buf,n);
-			n = sendto(sock,"Got your message\n",17, 0,(struct sockaddr *)&from,fromlen);
-			
-			if (n  < 0) 
-			{
-				error("sendto");
-			}
-		}*/
 		
 		checkAndSendFile(sock);
 	}

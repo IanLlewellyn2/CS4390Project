@@ -56,7 +56,7 @@ void sendFile(FILE* file, int size, int socket)
 		numBytesRead = fread(fileData, 1, 10000, file);
 		write(socket, fileData, numBytesRead);
 		bzero(fileData, 10000);
-		sleep(1);
+//		sleep(1);
 	}
 }
 

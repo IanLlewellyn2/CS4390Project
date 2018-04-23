@@ -15,7 +15,7 @@ void error(const char *msg)
     perror(msg);
     exit(0);
 }
-void askForFileUDP(int sockfd)
+void askForFileUDP(int sockfd, unsigned int length, struct sockaddr_in server, struct sockaddr_in from)
 {
 	char buffer[20];
 	bzero(buffer, 20);
@@ -33,7 +33,7 @@ void askForFileUDP(int sockfd)
 //	write(1, buffer, 6); //write checksum to user
 	bzero(buffer, 20);
 }
-void getFileUDP(int socket)
+void getFileUDP(int socket, unsigned int length, struct sockaddr_in server, struct sockaddr_in from)
 {
 	int numBytes = 10000, i;
 	char fileData[10000];
@@ -51,7 +51,7 @@ void getFileUDP(int socket)
 	//start reading in data
 	while(numBytes == 10000)
 	{
-		numBytes = recv(socket, fileData, 10000, 0, (struct sockaddr *)&from, &length);
+		numBytes = recvfrom(socket, fileData, 10000, 0, (struct sockaddr *)&from, &length);
 //		printf("Got %d bytes to write into my file\n", numBytes);
 		//write received data into new file
 		fwrite(fileData, 1, numBytes, file);
@@ -267,8 +267,8 @@ int main(int argc, char *argv[])
 		write(1,"Got an ack: ",12);
 		write(1,buffer,n); */
 		
-		askForFileUDP(sock);
-		getFileUDP(sock);
+		askForFileUDP(sock, length, server, from);
+		getFileUDP(sock, length, server, from);
 		close(sock);
 	} 
 	//----------------------------------end UDP-------------------------------//

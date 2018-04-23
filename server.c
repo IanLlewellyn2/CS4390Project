@@ -14,7 +14,7 @@ void error(const char *msg)
     exit(1);
 }
 
-void createChecksumUDP(FILE* file, int size, int socket)
+void createChecksumUDP(FILE* file, int size, int socket, struct sockaddr_in from, socklen_t fromlen)
 {
 	fseek(file, 0, SEEK_SET);
 	unsigned char checksum = 0;
@@ -40,7 +40,7 @@ void createChecksumUDP(FILE* file, int size, int socket)
 	printf("Here is the checksum: %u\n", checksum);
 }
 
-void sendFileUDP(FILE* file, int size, int socket)
+void sendFileUDP(FILE* file, int size, int socket, struct sockaddr_in from, socklen_t fromlen)
 {
 	//IF THE SLEEP IS REMOVED IT WILL BREAK
 	sleep(1); //to make sure the fileName doesnt start reading data
@@ -60,7 +60,7 @@ void sendFileUDP(FILE* file, int size, int socket)
 	}
 }
 
-void checkAndSendFileUDP(int newsockfd)
+void checkAndSendFileUDP(int newsockfd, struct sockaddr_in from, socklen_t fromlen)
 {
 	int i, n, lengthOfName;
 	FILE* data;	
@@ -98,9 +98,9 @@ void checkAndSendFileUDP(int newsockfd)
 	
 	//generate a checksum - we want to get 6 chars from the file
 	//first char, then 1/5, 2,5, 3/5, 4/5, last
-	createChecksumUDP(data, sizeOfFile, newsockfd);
+	createChecksumUDP(data, sizeOfFile, newsockfd, from, fromlen);
 	sendto(newsockfd, fileName, lengthOfName, 0, (struct sockaddr *)&from,&fromlen); //send client requested file name so client can open the file
-	sendFileUDP(data, sizeOfFile, newsockfd);
+	sendFileUDP(data, sizeOfFile, newsockfd, from, fromlen);
 	
 }
 

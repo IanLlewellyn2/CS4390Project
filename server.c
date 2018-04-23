@@ -47,6 +47,7 @@ void sendFile(FILE* file, int size, int socket)
 	int numBytesRead;
 	
 	//read into fileData buffer, then send to client via socket
+	fseek(file, 0, SEEK_SET);
 	numBytesRead = fread(fileData, 1, size, file);
 	write(socket, fileData, numBytesRead);
 }

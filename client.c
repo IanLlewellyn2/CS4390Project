@@ -8,6 +8,8 @@
 #include <netdb.h> 
 #include <arpa/inet.h>
 
+char gChecksum;
+
 void error(const char *msg)
 {
     perror(msg);
@@ -28,6 +30,7 @@ void askForFile(int sockfd)
 	write(1, buffer, 20); //write out server response to stdout
 	bzero(buffer, 20);
 	read(sockfd, buffer, 1); //read in the checksum
+	gChecksum = buffer[0];
 	printf("\nHere is the checksum for your file: %u\n", buffer[0]);
 //	write(1, buffer, 6); //write checksum to user
 	bzero(buffer, 20);
@@ -57,6 +60,9 @@ void getFile(int socket)
 	}
 	
 	//calculate checksum
+	fseek(data, 0, SEEK_END);
+	int sizeOfFile = ftell(data);
+	
 	fseek(file, 0, SEEK_SET);
 	unsigned char checksum = 0;
 	char * charFromFile = malloc(1);
@@ -65,7 +71,7 @@ void getFile(int socket)
 	//read in one char at a time
 	//subtract that char from the checksum char
 	//divide in order to notice if packets come in in the wrong order
-	for(i = 0; i < size; i++)
+	for(i = 0; i < sizeOfFile; i++)
 	{
 		fread(charFromFile, 1, 1, file);
 		fseek(file, i, SEEK_SET);

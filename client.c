@@ -30,7 +30,6 @@ void askForFileUDP(int sockfd, unsigned int length, struct sockaddr_in server, s
 	recvfrom(sockfd, buffer, 1, 0,(struct sockaddr *)&from, &length); //read in the checksum
 	gChecksum = buffer[0];
 	printf("\nHere is the server side checksum for your file: %u\n", buffer[0]);
-//	write(1, buffer, 6); //write checksum to user
 	bzero(buffer, 20);
 }
 void getFileUDP(int socket, unsigned int length, struct sockaddr_in server, struct sockaddr_in from)
@@ -42,6 +41,8 @@ void getFileUDP(int socket, unsigned int length, struct sockaddr_in server, stru
 	bzero(fileName, 20);
 	FILE* file;
 	
+	printf("pre opening file");
+	
 	//read the name of the file requested from socket
 	//open the file in client's folder
 	recvfrom(socket, fileName, 20, 0, (struct sockaddr *)&from, &length);
@@ -52,7 +53,7 @@ void getFileUDP(int socket, unsigned int length, struct sockaddr_in server, stru
 	while(numBytes == 10000)
 	{
 		numBytes = recvfrom(socket, fileData, 10000, 0, (struct sockaddr *)&from, &length);
-//		printf("Got %d bytes to write into my file\n", numBytes);
+		printf("Got %d bytes to write into my file\n", numBytes);
 		//write received data into new file
 		fwrite(fileData, 1, numBytes, file);
 	}
@@ -60,7 +61,7 @@ void getFileUDP(int socket, unsigned int length, struct sockaddr_in server, stru
 	//calculate checksum
 	fseek(file, 0, SEEK_END);
 	int sizeOfFile = ftell(file);
-//	printf("The size of the file is %d\n", sizeOfFile);
+	printf("The size of the file is %d\n", sizeOfFile);
 	
 	fseek(file, 0, SEEK_SET);
 	unsigned char checksum = 0;

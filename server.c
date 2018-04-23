@@ -51,6 +51,7 @@ void sendFileUDP(FILE* file, int size, int socket, struct sockaddr_in from, sock
 	
 	//read into fileData buffer, then send to client via socket
 	fseek(file, 0, SEEK_SET);
+	sleep(1);
 	for(i = 0; i * 10000 < size; i++)
 	{
 		numBytesRead = fread(fileData, 1, 10000, file);
@@ -70,6 +71,7 @@ void checkAndSendFileUDP(int newsockfd, struct sockaddr_in from, socklen_t froml
 	fileName[lengthOfName] = '\0'; //convert to a string by adding a null terminator
 	printf("file name length: %d\n", lengthOfName);
 	printf("%s is the string you are looking for\n", fileName);
+	sleep(1);
 	
 	if(access( fileName, F_OK ) != -1 ) 
 	{
@@ -96,6 +98,7 @@ void checkAndSendFileUDP(int newsockfd, struct sockaddr_in from, socklen_t froml
 	
 	printf("%d is the size of the file\n", sizeOfFile);
 	
+	sleep(1);
 	//generate a checksum - we want to get 6 chars from the file
 	//first char, then 1/5, 2,5, 3/5, 4/5, last
 	createChecksumUDP(data, sizeOfFile, newsockfd, from, fromlen);

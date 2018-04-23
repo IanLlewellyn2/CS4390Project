@@ -196,9 +196,9 @@ int main(int argc, char *argv[])
 		write(1,"Got an ack: ",12);
 		write(1,buffer,n); */
 		
-		askForFile(sockfd);
-		getFile(sockfd);
-		close(sockfd);
+		askForFile(sock);
+		getFile(sock);
+		close(sock);
 	} 
 	//----------------------------------end UDP-------------------------------//
 

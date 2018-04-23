@@ -34,6 +34,7 @@ void askForFile(int sockfd)
 }
 void getFile(int socket)
 {
+	int numBytes = 10000, i;
 	char fileData[10000];
 	bzero(fileData, 10000);
 	char fileName[20];
@@ -47,11 +48,13 @@ void getFile(int socket)
 	fseek(file, 0, SEEK_SET); //set to start of file
 	
 	//start reading in data
-	int numBytes = read(socket, fileData, 10000);
-	printf("Got %d bytes to write into my file\n", numBytes);
-	//
-	//write received data into new file
-	fwrite(fileData, 1, numBytes, file);
+	while(numBytes == 10000)
+	{
+		numBytes = read(socket, fileData, 10000);
+		printf("Got %d bytes to write into my file\n", numBytes);
+		//write received data into new file
+		fwrite(fileData, 1, numBytes, file);
+	}
 }
 
 int main(int argc, char *argv[])

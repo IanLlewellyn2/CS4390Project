@@ -24,7 +24,12 @@ void askForFileUDP(int sockfd, unsigned int length, struct sockaddr_in server, s
 	sendto(sockfd, buffer, lengthOfFileName - 1, 0,(const struct sockaddr *)&server,length); //send user input to server
 	bzero(buffer, 20);
 	
+	printf("testing 1");
+	
 	recvfrom(sockfd, buffer, 20, 0,(struct sockaddr *)&from, &length); //read in whether the file exists or not
+	
+	printf("testing 2");
+	
 	write(1, buffer, 20); //write out server response to stdout
 	bzero(buffer, 20);
 	recvfrom(sockfd, buffer, 1, 0,(struct sockaddr *)&from, &length); //read in the checksum

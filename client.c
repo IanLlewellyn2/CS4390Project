@@ -55,6 +55,26 @@ void getFile(int socket)
 		//write received data into new file
 		fwrite(fileData, 1, numBytes, file);
 	}
+	
+	//calculate checksum
+	fseek(file, 0, SEEK_SET);
+	unsigned char checksum = 0;
+	char * charFromFile = malloc(1);
+	
+	//walk through the file
+	//read in one char at a time
+	//subtract that char from the checksum char
+	//divide in order to notice if packets come in in the wrong order
+	for(i = 0; i < size; i++)
+	{
+		fread(charFromFile, 1, 1, file);
+		fseek(file, i, SEEK_SET);
+		checksum -= *charFromFile;
+		checksum = checksum/ 2;
+	}
+	//free memory from malloc call
+	free(charFromFile);
+	printf("Here is the client version of the checksum: %u\n", checksum);
 }
 
 int main(int argc, char *argv[])

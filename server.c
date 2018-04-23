@@ -44,14 +44,20 @@ void sendFile(FILE* file, int size, int socket)
 {
 	//IF THE SLEEP IS REMOVED IT WILL BREAK
 	sleep(1); //to make sure the fileName doesnt start reading data
+	int i;
 	char fileData[10000];
 	bzero(fileData, 10000);
 	int numBytesRead;
 	
 	//read into fileData buffer, then send to client via socket
 	fseek(file, 0, SEEK_SET);
-	numBytesRead = fread(fileData, 1, size, file);
-	write(socket, fileData, numBytesRead);
+	for(i = 0; i * 10000 < size; i++)
+	{
+		numBytesRead = fread(fileData, 1, 10000, file);
+		write(socket, fileData, numBytesRead);
+		bzero(fileData, 10000);
+		sleep(1);
+	}
 }
 
 void checkAndSendFile(int newsockfd)

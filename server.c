@@ -91,7 +91,7 @@ void checkAndSendFile(int newsockfd)
 	//generate a checksum - we want to get 6 chars from the file
 	//first char, then 1/5, 2,5, 3/5, 4/5, last
 	createChecksum(data, sizeOfFile, newsockfd);
-	write(newsockfd, fileName, lengthOfName - 1); //send client requested file name so client can open the file
+	write(newsockfd, fileName, lengthOfName); //send client requested file name so client can open the file
 	sendFile(data, sizeOfFile, newsockfd);
 	
 }

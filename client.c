@@ -21,13 +21,13 @@ void askForFileUDP(int sockfd)
 	bzero(buffer, 20);
 	printf("What file do you want?\n");
 	int lengthOfFileName = read(0, buffer, 20); //read from user
-	send(sockfd, buffer, lengthOfFileName - 1, 0); //send user input to server
+	sendto(sockfd, buffer, lengthOfFileName - 1, 0,(const struct sockaddr *)&server,length); //send user input to server
 	bzero(buffer, 20);
 	
-	recv(sockfd, buffer, 20, 0); //read in whether the file exists or not
+	recvfrom(sockfd, buffer, 20, 0,(struct sockaddr *)&from, &length); //read in whether the file exists or not
 	write(1, buffer, 20); //write out server response to stdout
 	bzero(buffer, 20);
-	recv(sockfd, buffer, 1, 0); //read in the checksum
+	recvfrom(sockfd, buffer, 1, 0,(struct sockaddr *)&from, &length); //read in the checksum
 	gChecksum = buffer[0];
 	printf("\nHere is the server side checksum for your file: %u\n", buffer[0]);
 //	write(1, buffer, 6); //write checksum to user
@@ -44,14 +44,14 @@ void getFileUDP(int socket)
 	
 	//read the name of the file requested from socket
 	//open the file in client's folder
-	recv(socket, fileName, 20, 0);
+	recvfrom(socket, fileName, 20, 0, (struct sockaddr *)&from, &length);
 	file = fopen(fileName, "w+");
 	fseek(file, 0, SEEK_SET); //set to start of file
 	
 	//start reading in data
 	while(numBytes == 10000)
 	{
-		numBytes = recv(socket, fileData, 10000, 0);
+		numBytes = recv(socket, fileData, 10000, 0, (struct sockaddr *)&from, &length);
 //		printf("Got %d bytes to write into my file\n", numBytes);
 		//write received data into new file
 		fwrite(fileData, 1, numBytes, file);

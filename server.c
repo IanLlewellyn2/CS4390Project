@@ -36,7 +36,7 @@ void createChecksumUDP(FILE* file, int size, int socket, struct sockaddr_in from
 	free(charFromFile);
 	//create a pointer so the checksum can be sent to client
 	char *pChecksum = &checksum;
-	sendto(socket, pChecksum, 1, 0, (struct sockaddr *)&from,&fromlen);
+	sendto(socket, pChecksum, 1, 0, (struct sockaddr *)&from,fromlen);
 	printf("Here is the checksum: %u\n", checksum);
 }
 
@@ -51,12 +51,13 @@ void sendFileUDP(FILE* file, int size, int socket, struct sockaddr_in from, sock
 	
 	//read into fileData buffer, then send to client via socket
 	fseek(file, 0, SEEK_SET);
+	sleep(1);
 	for(i = 0; i * 10000 < size; i++)
 	{
 		numBytesRead = fread(fileData, 1, 10000, file);
-		sendto(socket, fileData, numBytesRead, 0, (struct sockaddr *)&from,&fromlen);
+		sendto(socket, fileData, numBytesRead, 0, (struct sockaddr *)&from,fromlen);
 		bzero(fileData, 10000);
-//		sleep(1);
+		sleep(1);
 	}
 }
 
@@ -70,16 +71,17 @@ void checkAndSendFileUDP(int newsockfd, struct sockaddr_in from, socklen_t froml
 	fileName[lengthOfName] = '\0'; //convert to a string by adding a null terminator
 	printf("file name length: %d\n", lengthOfName);
 	printf("%s is the string you are looking for\n", fileName);
+	sleep(1);
 	
 	if(access( fileName, F_OK ) != -1 ) 
 	{
 		//file exists
-		n = sendto(newsockfd, "File exists\n", 11, 0, (struct sockaddr *)&from,&fromlen);
+		n = sendto(newsockfd, "File exists\n", 11, 0, (struct sockaddr *)&from,fromlen);
 	} 
 	else 
 	{
 		//file does not exist
-		n = sendto(newsockfd, "File does not exist\n", 19, 0, (struct sockaddr *)&from,&fromlen);	
+		n = sendto(newsockfd, "File does not exist\n", 19, 0, (struct sockaddr *)&from,fromlen);	
 		//this probably needs a pointer or something
 		//good luck future ian
 		//fileName is blank in the printf
@@ -96,10 +98,11 @@ void checkAndSendFileUDP(int newsockfd, struct sockaddr_in from, socklen_t froml
 	
 	printf("%d is the size of the file\n", sizeOfFile);
 	
+	sleep(1);
 	//generate a checksum - we want to get 6 chars from the file
 	//first char, then 1/5, 2,5, 3/5, 4/5, last
 	createChecksumUDP(data, sizeOfFile, newsockfd, from, fromlen);
-	sendto(newsockfd, fileName, lengthOfName, 0, (struct sockaddr *)&from,&fromlen); //send client requested file name so client can open the file
+	sendto(newsockfd, fileName, lengthOfName, 0, (struct sockaddr *)&from,fromlen); //send client requested file name so client can open the file
 	sendFileUDP(data, sizeOfFile, newsockfd, from, fromlen);
 	
 }
@@ -242,21 +245,6 @@ int main(int argc, char *argv[])
           error("ERROR on accept");
 		}
 		
-/*		bzero(buffer,256);
-		n = read(newsockfd,buffer,255);
-		if (n < 0)
-		{
-			error("ERROR reading from socket");
-		}
-		
-		printf("Here is the message: %s\n",buffer);
-		n = write(newsockfd,"I got your message",18);
-		
-		if (n < 0)
-		{			
-			error("ERROR writing to socket");
-		}
-*/
 		checkAndSendFile(newsockfd);
 		
 		close(newsockfd);
@@ -296,23 +284,6 @@ int main(int argc, char *argv[])
 		}
 		
 		fromlen = sizeof(struct sockaddr_in);
-/*		while (1) 
-		{
-			n = recvfrom(sock,buf,1024,0,(struct sockaddr *)&from,&fromlen);
-			if (n < 0)
-			{				
-				error("recvfrom");
-			}
-			
-			write(1,"Received a datagram: ",21);
-			write(1,buf,n);
-			n = sendto(sock,"Got your message\n",17, 0,(struct sockaddr *)&from,fromlen);
-			
-			if (n  < 0) 
-			{
-				error("sendto");
-			}
-		}*/
 		
 		checkAndSendFile(sock);
 	}
